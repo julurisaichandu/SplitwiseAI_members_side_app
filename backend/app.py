@@ -23,7 +23,7 @@ app = FastAPI(title="Splitwise Member App", version="1.0.0")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],  # Member app frontend URL
+    allow_origins=["*"],  # Member app frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
