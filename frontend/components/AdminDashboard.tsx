@@ -4,6 +4,7 @@ import { useAuth } from '@clerk/nextjs';
 import ExpenseMigration from './ExpenseMigration';
 import BulkExpenseMigration from './BulkExpenseMigration';
 import BatchReviewComponent from './BatchReviewComponent';
+import { API_BASE_URL } from '../lib/config';
 
 
 interface PendingUpdate {
@@ -39,7 +40,7 @@ const AdminDashboard: React.FC = () => {
   const fetchPendingUpdates = async () => {
     try {
       const token = await getToken();
-      const response = await fetch('/api/admin/pending-updates', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/pending-updates`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ const AdminDashboard: React.FC = () => {
       setProcessingId(updateId);
       const token = await getToken();
       
-      const response = await fetch('/api/admin/approve-update', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/approve-update`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

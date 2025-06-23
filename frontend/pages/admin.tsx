@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth, useUser } from '@clerk/nextjs';
 import AdminDashboard from '../components/AdminDashboard';
+import { API_BASE_URL } from '../lib/config';
 
 const AdminPage: React.FC = () => {
   const { getToken } = useAuth();
@@ -20,7 +21,7 @@ const AdminPage: React.FC = () => {
       const token = await getToken();
       
       // Make a test API call to check admin status
-      const response = await fetch('/api/admin/pending-updates', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/pending-updates`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

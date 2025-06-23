@@ -1,6 +1,7 @@
 // member-app/frontend/components/ExpenseMigration.tsx
 import React, { useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { API_BASE_URL } from '../lib/config';
 
 interface MigrationResult {
   status: 'success' | 'already_exists' | 'error';
@@ -29,7 +30,7 @@ const ExpenseMigration: React.FC = () => {
 
     try {
       const token = await getToken();
-      const response = await fetch(`/api/migrate-expense?expense_id=${expenseId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/migrate-expense?expense_id=${expenseId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

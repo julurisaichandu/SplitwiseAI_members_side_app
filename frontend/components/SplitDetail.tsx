@@ -1,6 +1,7 @@
 // member-app/frontend/components/SplitDetail.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { API_BASE_URL } from '../lib/config';
 
 interface Split {
   _id: string;
@@ -37,7 +38,7 @@ const SplitDetail: React.FC<SplitDetailProps> = ({ splitId }) => {
   const fetchSplitDetail = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`/api/member/splits/${splitId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/member/splits/${splitId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ const SplitDetail: React.FC<SplitDetailProps> = ({ splitId }) => {
       setUpdating(itemName);
       const token = await getToken();
       
-      const response = await fetch('/api/member/request-update', {
+      const response = await fetch(`${API_BASE_URL}/api/member/request-update`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

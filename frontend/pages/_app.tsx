@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ClerkProvider, SignedIn, SignedOut, UserButton, SignInButton, useAuth } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../lib/config';
 
 // Component to check admin status and show admin nav
 const AdminNavLink = () => {
@@ -16,7 +17,7 @@ const AdminNavLink = () => {
   const checkAdminStatus = async () => {
     try {
       const token = await getToken();
-      const response = await fetch('/api/admin/pending-updates', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/pending-updates`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

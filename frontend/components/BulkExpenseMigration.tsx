@@ -1,6 +1,7 @@
 // member-app/frontend/components/BulkExpenseMigration.tsx
 import React, { useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { API_BASE_URL } from '../lib/config';
 
 interface BulkImportResult {
   status: 'success' | 'partial' | 'error';
@@ -59,7 +60,7 @@ const BulkExpenseMigration: React.FC = () => {
         group_id: selectedGroup
       });
 
-      const response = await fetch(`/api/bulk-migrate-expenses?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/api/bulk-migrate-expenses?${params}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

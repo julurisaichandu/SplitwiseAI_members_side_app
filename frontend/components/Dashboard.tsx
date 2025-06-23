@@ -1,6 +1,7 @@
 // member-app/frontend/components/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { API_BASE_URL } from '../lib/config';
 
 interface Split {
   _id: string;
@@ -37,7 +38,7 @@ const Dashboard: React.FC = () => {
   const fetchSplits = async () => {
     try {
       const token = await getToken();
-      const response = await fetch('/api/member/splits', {
+      const response = await fetch(`${API_BASE_URL}/api/member/splits`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

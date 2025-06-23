@@ -1,7 +1,7 @@
 // member-app/frontend/components/BatchReviewComponent.tsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
-
+import {API_BASE_URL} from "../lib/config";
 interface GroupedRequest {
   expense_id: string;
   expense_description: string;
@@ -95,7 +95,7 @@ const BatchReviewComponent: React.FC = () => {
   const fetchGroupedRequests = async () => {
     try {
       const token = await getToken();
-      const response = await fetch("/api/admin/grouped-pending-requests", {
+      const response = await fetch(`${API_BASE_URL}/admin/grouped-pending-requests`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -117,7 +117,7 @@ const BatchReviewComponent: React.FC = () => {
     try {
       const token = await getToken();
       const response = await fetch(
-        `/api/admin/expense-group-status/${expenseId}`,
+        `${API_BASE_URL}/api/admin/expense-group-status/${expenseId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -192,7 +192,7 @@ const BatchReviewComponent: React.FC = () => {
     setProcessing(true);
     try {
       const token = await getToken();
-      const response = await fetch("/api/admin/commit-request-decisions", {
+      const response = await fetch(`${API_BASE_URL}/admin/commit-request-decisions`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -230,7 +230,7 @@ const BatchReviewComponent: React.FC = () => {
     setProcessing(true);
     try {
       const token = await getToken();
-      const response = await fetch("/api/admin/preview-splitwise-changes", {
+      const response = await fetch(`${API_BASE_URL}/api/admin/preview-splitwise-changes`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -270,7 +270,7 @@ const BatchReviewComponent: React.FC = () => {
     try {
       const token = await getToken();
       const response = await fetch(
-        "/api/admin/apply-to-splitwise-and-mongodb",
+        `${API_BASE_URL}/api/admin/apply-to-splitwise-and-mongodb`,
         {
           method: "POST",
           headers: {

@@ -1,6 +1,7 @@
 // member-app/frontend/pages/my-requests.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { API_BASE_URL } from '../lib/config';
 
 interface PendingRequest {
   _id: string;
@@ -30,7 +31,7 @@ export default function MyRequestsPage() {
   const fetchRequests = async () => {
     try {
       const token = await getToken();
-      const response = await fetch('/api/member/my-requests', {
+      const response = await fetch(`${API_BASE_URL}/api/member/my-requests`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
