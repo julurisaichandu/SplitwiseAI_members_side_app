@@ -1,68 +1,83 @@
 # member-app/backend/models/database.py
-from beanie import Document
-from pydantic import BaseModel
-from typing import Dict, List, Optional, Any
 from datetime import datetime
+from typing import Dict, List, Optional, Any, Union
+from pydantic import Field, field_validator
+from beanie import Document
 
 class SplitData(Document):
     """Main collection: splits"""
-    splitwise_id: str  # The Splitwise expense ID
-    group_id: str      # Splitwise group ID
-    group_name: str    # Splitwise group name
-    description: str   # Expense description
+    splitwise_id: str
+    group_id: str
+    group_name: str
+    description: str
     total_amount: float
-    paid_by: str       # Name of person who paid
-    created_by: str    # Who created this expense
-    
-    # Items data (your existing structure)
-    items: List[Dict[str, Any]]  # List of items with name, price, members
-    
-    # Member splits (name -> amount)
+    paid_by: str
+    created_by: str
+    items: List[Dict[str, Any]]
     member_splits: Dict[str, float]
     
-    # Metadata
-    created_at: datetime
-    updated_at: datetime
+    # Fix datetime fields to handle MongoDB format
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    
+    @field_validator('created_at', 'updated_at', mode='before')
+    def parse_datetime(cls, v):
+        if isinstance(v, dict) and '$date' in v:
+            # Handle MongoDB extended JSON format
+            date_str = v['$date']
+            if isinstance(date_str, str):
+                return datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        return v
     
     class Settings:
-        name = "splits"  # Collection name in MongoDB
-
+        name = "splits"  # or "splitwise_ai.splits" if you didn't rename
 
 class PendingUpdate(Document):
     """Collection: pending_updates"""
-    mongo_split_id: str     # Reference to SplitData._id
-    splitwise_expense_id: str  # Reference to Splitwise expense ID
-    updated_by_email: str      # Email of member making request
-    updated_by_name: str       # Splitwise name of member
-    
-    # What they want to change
-    proposed_changes: List[Dict[str, Any]]  # [{"item_name": "Pizza", "action": "join/leave"}]
-    
-    status: str = "pending"    # "pending", "approved", "rejected"
+    mongo_split_id: str
+    splitwise_expense_id: str
+    updated_by_email: str
+    updated_by_name: str
+    proposed_changes: List[Dict[str, Any]]
+    status: str = "pending"
     admin_notes: Optional[str] = None
     
-    # Metadata
-    created_at: datetime
+    # Fix datetime fields
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
     processed_at: Optional[datetime] = None
     
+    @field_validator('created_at', 'processed_at', mode='before')
+    def parse_datetime(cls, v):
+        if isinstance(v, dict) and '$date' in v:
+            date_str = v['$date']
+            if isinstance(date_str, str):
+                return datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        return v
+    
     class Settings:
-        name = "pending_updates"
-
+        name = "pending_updates"  # or "splitwise_ai.pending_updates"
 
 class MemberMapping(Document):
     """Collection: member_mappings"""
-    email: str                 # Member's email (from Clerk auth)
-    splitwise_name: str        # Their name in Splitwise
-    groups: List[str]          # List of group IDs they belong to
-    is_active: bool = True     # Can be used to deactivate members
+    email: str
+    splitwise_name: str
+    groups: List[str]
+    is_active: bool = True
     
-    # Metadata
-    created_at: datetime
-    updated_at: datetime
+    # Fix datetime fields
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    
+    @field_validator('created_at', 'updated_at', mode='before')
+    def parse_datetime(cls, v):
+        if isinstance(v, dict) and '$date' in v:
+            date_str = v['$date']
+            if isinstance(date_str, str):
+                return datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        return v
     
     class Settings:
-        name = "member_mappings"
-
+        name = "member_mappings"  # or "splitwise_ai.member_mappings"
 
 # Helper models for API responses
 class SplitResponse(BaseModel):
