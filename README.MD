@@ -1,17 +1,3 @@
-{
-  "_id": {
-    "$oid": "685449832c37714911b0c9ce"
-  },
-  "email": "juluri.saichandu99@gmail.com",
-  "splitwise_name": "Saichandu",
-  "groups": [
-    "53885029",
-    "75628383"
-  ],
-  "is_active": true,
-  "created_at": "2025-06-15T10:30:00.000Z",
-  "updated_at": "2025-06-15T10:30:00.000Z"
-}
 
 
 
