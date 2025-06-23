@@ -1,7 +1,7 @@
 # member-app/backend/models/database.py
 from datetime import datetime
 from typing import Dict, List, Optional, Any, Union
-from pydantic import Field, field_validator
+from pydantic import BaseModel, Field, field_validator
 from beanie import Document
 
 class SplitData(Document):
